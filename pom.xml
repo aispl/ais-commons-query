@@ -1,13 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+      <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
     <groupId>pl.ais.commons</groupId>
     <artifactId>ais-commons-query</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <scm>
-        <connection>scm:git:gitosis@git.ais.pl:commons-query.git</connection>
-        <url>scm:git:gitosis@git.ais.pl:commons-query.git</url>
-        <developerConnection>scm:git:gitosis@git.ais.pl:commons-query.git</developerConnection>
+        <connection>scm:git:git@github.com:aispl/ais-commons-query.git</connection>
+        <url>scm:git:git@github.com:aispl/ais-commons-query.git</url>
+        <developerConnection>scm:git:git@github.com:aispl/ais-commons-query.git</developerConnection>
     </scm>
 
     <build>
