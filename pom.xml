@@ -9,6 +9,19 @@
         <url>scm:git:gitosis@git.ais.pl:commons-query.git</url>
         <developerConnection>scm:git:gitosis@git.ais.pl:commons-query.git</developerConnection>
     </scm>
+
+    <build>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.5.1</version>
+          <configuration>
+            <source>1.6</source>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
