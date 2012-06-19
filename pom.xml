@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pl.ais.commons</groupId>
+    <artifactId>ais-commons-query</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <scm>
+        <connection>scm:git:gitosis@git.ais.pl:commons-query.git</connection>
+        <url>scm:git:gitosis@git.ais.pl:commons-query.git</url>
+        <developerConnection>scm:git:gitosis@git.ais.pl:commons-query.git</developerConnection>
+    </scm>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+    </dependencies>
+</project>
