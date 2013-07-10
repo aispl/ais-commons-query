@@ -1,22 +1,25 @@
 package pl.ais.commons.query;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Container for search results of specified type.
  *
  * @author Warlock, AIS.PL
- * @since 1.0
+ * @since 1.0.1
  * @param <T> determines the type of each search result
  */
+@Immutable
 @SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.MissingSerialVersionUID"})
 public final class SearchResults<T extends Serializable> implements Serializable {
 
@@ -26,11 +29,11 @@ public final class SearchResults<T extends Serializable> implements Serializable
     /**
      * @return empty search results
      */
-    public static final <E extends Serializable> SearchResults<E> emptySearchResults() {
+    public static <E extends Serializable> SearchResults<E> emptySearchResults() {
         return EMPTY;
     }
 
-    private final List<T> elements;
+    private final ImmutableList<T> elements;
 
     private final long totalRecords;
 
@@ -42,29 +45,36 @@ public final class SearchResults<T extends Serializable> implements Serializable
     }
 
     /**
-     * Constructor.
+     * Constructs new instance.
      *
-     * @param elements
-     * @param totalRecords
+     * @param elements elements to be included in this search results
+     * @param totalRecords total number of records
      */
     public SearchResults(@Nonnull final List<T> elements, @Nonnegative final long totalRecords) {
-        this.elements = elements;
+
+        // Verify constructor requirements, ...
+        if (null == elements) {
+            throw new AssertionError("Please, provide the elements to include in search results.");
+        }
+        if (totalRecords < 0) {
+            throw new AssertionError("Please, provide non-negative total number of records.");
+        }
+
+        // ... and initialize this instance fields.
+        this.elements = ImmutableList.copyOf(elements);
         this.totalRecords = totalRecords;
-        // Sanity check ...
-        Validate.isTrue(null != this.elements, "Elements shouldn't be null");
-        Validate.isTrue(this.totalRecords >= 0, "Total number of records should be non-negative");
     }
 
     /**
-     * @return the elements
+     * @return the unmodifiable view of elements
      */
     @Nonnull
     public List<T> getElements() {
-        return Collections.unmodifiableList(elements);
+        return elements;
     }
 
     /**
-     * @return the totalRecords
+     * @return the total number of records
      */
     @Nonnegative
     public long getTotalRecords() {
@@ -76,7 +86,7 @@ public final class SearchResults<T extends Serializable> implements Serializable
      */
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("totalRecords", totalRecords).append("elements", elements).toString();
+        return toStringHelper(this).add("totalRecords", totalRecords).add("elements", elements).toString();
     }
 
 }

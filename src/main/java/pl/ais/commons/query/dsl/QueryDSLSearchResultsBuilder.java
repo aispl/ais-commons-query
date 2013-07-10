@@ -33,6 +33,7 @@ public final class QueryDSLSearchResultsBuilder<Q extends Projectable & Query<Q>
         return new QueryDSLSearchResultsBuilder<Q, T>(query);
     }
 
+    @SuppressWarnings("PMD.AvoidProtectedFieldInFinalClass")
     protected transient Q query;
 
     /**
@@ -62,14 +63,14 @@ public final class QueryDSLSearchResultsBuilder<Q extends Projectable & Query<Q>
     /**
      * Defines the {@link ProjectionProvider projection provider} which will be used for the encapsulated query.
      *
-     * @param projectionProvider the projection provider
+     * @param provider the projection provider
      * @return {@link SearchResultsProvider} which can be used for fetching the search results
      */
-    public SearchResultsProvider<T> withProjectionProvider(final ProjectionProvider<T> projectionProvider) {
+    public SearchResultsProvider<T> withProjectionProvider(final ProjectionProvider<T> provider) {
         return new SearchResultsProvider<T>() {
 
             /**
-             * @see pl.ais.commons.query.SearchResultsProvider#provideForSelection(pl.ais.commons.query.Selection)
+             * {@inheritDoc}
              */
             @Override
             public SearchResults<T> provideForSelection(final Selection selection) {
@@ -83,7 +84,7 @@ public final class QueryDSLSearchResultsBuilder<Q extends Projectable & Query<Q>
                     }
                     query = query.orderBy(selection.<OrderSpecifier<?>> getOrderings());
                     // ... query the database and process the results ...
-                    searchResults = new SearchResults<T>(projectionProvider.provideForQuery(query), totalRecords);
+                    searchResults = new SearchResults<T>(provider.provideForQuery(query), totalRecords);
                 } else {
                     searchResults = SearchResults.emptySearchResults();
                 }

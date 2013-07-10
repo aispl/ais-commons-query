@@ -1,15 +1,15 @@
 package pl.ais.commons.query;
 
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 
 /**
- * Base class for {@link Selection selections}.
+ * Class to be extended by all {@linkplain Selection selections}.
  *
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
-@SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.MissingSerialVersionUID"})
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public abstract class AbstractSelection implements Selection {
 
     private final int displayLength;
@@ -23,13 +23,19 @@ public abstract class AbstractSelection implements Selection {
      * @param displayLength the number of records (if {@code -1}, all records will be used)
      */
     protected AbstractSelection(final int startIndex, final int displayLength) {
-        Validate.isTrue(startIndex >= 0, "Start index shouldn't be negative.");
+
+        // Verify constructor requirements, ...
+        if (startIndex < 0) {
+            throw new AssertionError("Please, provide non-negative start index.");
+        }
+
+        // ... and initialize this instance fields.
         this.startIndex = startIndex;
         this.displayLength = displayLength;
     }
 
     /**
-     * @see pl.ais.commons.query.Selection#getDisplayLength()
+     * {@inheritDoc}
      */
     @Override
     public int getDisplayLength() {
@@ -37,7 +43,7 @@ public abstract class AbstractSelection implements Selection {
     }
 
     /**
-     * @see pl.ais.commons.query.Selection#getStartIndex()
+     * {@inheritDoc}
      */
     @Override
     public int getStartIndex() {
@@ -45,7 +51,7 @@ public abstract class AbstractSelection implements Selection {
     }
 
     /**
-     * @see pl.ais.commons.query.Selection#isSelectingSubset()
+     * {@inheritDoc}
      */
     @Override
     public boolean isSelectingSubset() {
@@ -53,10 +59,10 @@ public abstract class AbstractSelection implements Selection {
     }
 
     /**
-     * @return new instance of {@link ToStringBuilder} for this object, with appended start index and display length
+     * @return new instance of {@link ToStringHelper} for this object, with appended start index and display length
      */
-    protected ToStringBuilder toStringBuilder() {
-        return new ToStringBuilder(this).append("startIndex", startIndex).append("displayLength", displayLength);
+    protected ToStringHelper toStringHelper() {
+        return Objects.toStringHelper(this).add("startIndex", startIndex).add("displayLength", displayLength);
     }
 
 }

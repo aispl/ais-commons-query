@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.concurrent.Immutable;
+
 import pl.ais.commons.query.AbstractSelection;
 import pl.ais.commons.query.Selection;
 
@@ -16,6 +18,8 @@ import com.mysema.query.types.OrderSpecifier;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
+@Immutable
+@SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.MissingSerialVersionUID"})
 public final class QueryDSLSelection extends AbstractSelection {
 
     private final OrderSpecifier<?>[] orderings;
@@ -36,7 +40,7 @@ public final class QueryDSLSelection extends AbstractSelection {
     @Override
     @SuppressWarnings("unchecked")
     public OrderSpecifier<?>[] getOrderings() {
-        return orderings;
+        return Arrays.copyOf(orderings, orderings.length);
     }
 
     /**
@@ -44,17 +48,17 @@ public final class QueryDSLSelection extends AbstractSelection {
      */
     @Override
     public String toString() {
-        return toStringBuilder().append("orderings", orderings).build();
+        return toStringHelper().add("orderings", orderings).toString();
     }
 
     /**
-     * @see pl.ais.commons.query.Selection#withOrderings(R[])
+     * {@inheritDoc}
      */
     @Override
     public <R extends Serializable> Selection withOrderings(@SuppressWarnings("hiding") final R... orderings) {
         final List<OrderSpecifier<?>> modified = new ArrayList<OrderSpecifier<?>>();
         // Copy those orderings from the current settings, which are not redefined by the method parameters ...
-        processing: for (OrderSpecifier<?> ordering : this.orderings) {
+        processing: for (final OrderSpecifier<?> ordering : this.orderings) {
             for (int i = 0; i < orderings.length; i++) {
                 if (ordering.getTarget().equals(((OrderSpecifier<?>) orderings[i]).getTarget())) {
                     continue processing;
