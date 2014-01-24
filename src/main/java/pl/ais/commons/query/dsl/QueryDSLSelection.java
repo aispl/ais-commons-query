@@ -19,8 +19,15 @@ import com.mysema.query.types.OrderSpecifier;
  * @since 1.0.1
  */
 @Immutable
-@SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.MissingSerialVersionUID"})
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public final class QueryDSLSelection extends AbstractSelection {
+
+    /**
+     * Identifies the original class version for which it is capable of writing streams and from which it can read.
+     *
+     * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
+     */
+    private static final long serialVersionUID = -46788264053284666L;
 
     private final OrderSpecifier<?>[] orderings;
 
@@ -31,7 +38,7 @@ public final class QueryDSLSelection extends AbstractSelection {
      */
     public QueryDSLSelection(final int startIndex, final int displayLength, final OrderSpecifier<?>... orderings) {
         super(startIndex, displayLength);
-        this.orderings = orderings;
+        this.orderings = Arrays.copyOf(orderings, orderings.length);
     }
 
     /**

@@ -1,5 +1,7 @@
 package pl.ais.commons.query;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
 
@@ -10,7 +12,15 @@ import com.google.common.base.Objects.ToStringHelper;
  * @since 1.0.1
  */
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
+@ThreadSafe
 public abstract class AbstractSelection implements Selection {
+
+    /**
+     * Identifies the original class version for which it is capable of writing streams and from which it can read.
+     *
+     * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
+     */
+    private static final long serialVersionUID = 2533393473585095184L;
 
     private final int displayLength;
 
@@ -26,7 +36,7 @@ public abstract class AbstractSelection implements Selection {
 
         // Verify constructor requirements, ...
         if (startIndex < 0) {
-            throw new AssertionError("Please, provide non-negative start index.");
+            throw new IllegalArgumentException("Start index should be non-negative.");
         }
 
         // ... and initialize this instance fields.

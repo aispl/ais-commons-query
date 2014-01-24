@@ -20,14 +20,21 @@ import com.google.common.collect.ImmutableList;
  * @param <T> determines the type of each search result
  */
 @Immutable
-@SuppressWarnings({"PMD.BeanMembersShouldSerialize", "PMD.MissingSerialVersionUID"})
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public final class SearchResults<T extends Serializable> implements Serializable {
 
     @SuppressWarnings("rawtypes")
     private static final SearchResults EMPTY = new SearchResults();
 
     /**
-     * @return empty search results
+     * Identifies the original class version for which it is capable of writing streams and from which it can read.
+     *
+     * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
+     */
+    private static final long serialVersionUID = 7272352995253612865L;
+
+    /**
+     * @return shared instance of empty search results
      */
     public static <E extends Serializable> SearchResults<E> emptySearchResults() {
         return EMPTY;
@@ -54,10 +61,10 @@ public final class SearchResults<T extends Serializable> implements Serializable
 
         // Verify constructor requirements, ...
         if (null == elements) {
-            throw new AssertionError("Please, provide the elements to include in search results.");
+            throw new IllegalArgumentException("Elements are required.");
         }
         if (totalRecords < 0) {
-            throw new AssertionError("Please, provide non-negative total number of records.");
+            throw new IllegalArgumentException("Total number of records should be non-negative.");
         }
 
         // ... and initialize this instance fields.
