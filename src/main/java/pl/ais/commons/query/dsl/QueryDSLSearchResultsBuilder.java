@@ -47,13 +47,12 @@ public final class QueryDSLSearchResultsBuilder<Q extends Projectable & Query<Q>
     }
 
     /**
-     * Applies given designation to the encapsulated query.
+     * Applies given predicate to the encapsulated query.
      *
-     * @param designation determines the predicate which should be matched by desired clients
+     * @param predicate predicate which should be matched by desired records
      * @return this object
      */
-    public QueryDSLSearchResultsBuilder<Q, T> andRecordsMatching(final QueryDSLPredicatePrecursor designation) {
-        final Predicate predicate = designation.toPredicate();
+    public QueryDSLSearchResultsBuilder<Q, T> andRecordsMatching(final Predicate predicate) {
         if (null != predicate) {
             query = query.where(predicate);
         }
