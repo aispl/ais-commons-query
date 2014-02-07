@@ -1,10 +1,7 @@
 package pl.ais.commons.query.dsl;
 
-import java.io.Serializable;
-
 import javax.annotation.concurrent.Immutable;
 
-import pl.ais.commons.query.Selection;
 import pl.ais.commons.query.SelectionFactory;
 
 import com.mysema.query.types.OrderSpecifier;
@@ -16,15 +13,15 @@ import com.mysema.query.types.OrderSpecifier;
  * @since 1.0.1
  */
 @Immutable
-public class QueryDSLSelectionFactory implements SelectionFactory {
+public class QueryDSLSelectionFactory implements SelectionFactory<OrderSpecifier<?>> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R extends Serializable> Selection createSelection(
-        final int startIndex, final int displayLength, final R... orderings) {
-        return new QueryDSLSelection(startIndex, displayLength, (OrderSpecifier[]) orderings);
+    public QueryDSLSelection createSelection(
+        final int startIndex, final int displayLength, final OrderSpecifier<?>... orderings) {
+        return new QueryDSLSelection(startIndex, displayLength, orderings);
     }
 
 }
