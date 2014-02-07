@@ -1,5 +1,7 @@
 package pl.ais.commons.query;
 
+import java.io.Serializable;
+
 /**
  * Defines commonly used set of {@link Selection selections}.
  *
@@ -14,7 +16,8 @@ public final class Selections {
      * @param factory the factory which will be used to create Selection
      * @return newly created {@link Selection} instance
      */
-    public static Selection allRecords(final SelectionFactory factory) {
+    @SuppressWarnings("unchecked")
+    public static <R extends Serializable> Selection<R> allRecords(final SelectionFactory<R> factory) {
         return factory.createSelection(0, -1);
     }
 
