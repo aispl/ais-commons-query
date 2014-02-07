@@ -9,10 +9,11 @@ import javax.annotation.Nonnull;
  * Defines the subset of database records by specifying the records ordering, index of the first one,
  * and the desired number of records.
  *
+ * @param <R> the type of ordering element
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
-public interface Selection extends Serializable {
+public interface Selection<R extends Serializable> extends Serializable {
 
     /**
      * @return the display length ({@code -1} when all records should be selected)
@@ -24,7 +25,7 @@ public interface Selection extends Serializable {
      * @return current orderings used by this selection
      */
     @Nonnull
-    <R extends Serializable> R[] getOrderings();
+    R[] getOrderings();
 
     /**
      * @return the index of first record
@@ -45,6 +46,6 @@ public interface Selection extends Serializable {
      * @return newly created {@link Selection} instance
      */
     @Nonnull
-    <R extends Serializable> Selection withOrderings(@Nonnull final R... orderings);
+    Selection<R> withOrderings(@Nonnull final R... orderings);
 
 }
