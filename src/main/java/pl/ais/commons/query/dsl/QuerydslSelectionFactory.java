@@ -13,15 +13,15 @@ import com.mysema.query.types.OrderSpecifier;
  * @since 1.0.1
  */
 @Immutable
-public class QueryDSLSelectionFactory implements SelectionFactory<OrderSpecifier<?>> {
+public class QuerydslSelectionFactory implements SelectionFactory<OrderSpecifier<?>> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public QueryDSLSelection createSelection(
+    public QuerydslSelection createSelection(
         final int startIndex, final int displayLength, final OrderSpecifier<?>... orderings) {
-        return new QueryDSLSelection(startIndex, displayLength, orderings);
+        return new QuerydslSelection(startIndex, displayLength, orderings);
     }
 
 }
