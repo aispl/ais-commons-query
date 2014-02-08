@@ -13,6 +13,7 @@ import com.mysema.query.types.Expression;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 final class AsListTransformer<T> implements ResultTransformer<List<T>> {
 
     private final Expression<T> projection;

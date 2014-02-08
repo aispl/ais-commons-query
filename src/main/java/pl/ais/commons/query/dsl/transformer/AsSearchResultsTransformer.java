@@ -15,6 +15,7 @@ import com.mysema.query.types.Expression;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 final class AsSearchResultsTransformer<T extends Serializable> implements ResultTransformer<SearchResults<T>> {
 
     private final Expression<T> projection;

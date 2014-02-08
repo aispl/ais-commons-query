@@ -19,6 +19,7 @@ import com.mysema.query.types.Predicate;
  * @since 1.1.1
  */
 @NotThreadSafe
+@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public class Results<Q extends Projectable & SimpleQuery<Q>> {
 
     /**
