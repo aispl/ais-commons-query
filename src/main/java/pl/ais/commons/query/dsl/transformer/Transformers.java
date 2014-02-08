@@ -47,6 +47,16 @@ public final class Transformers {
     }
 
     /**
+     * Creates {@link ResultTransformer} transforming query results into single result.
+     *
+     * @param projection results projection
+     * @return newly created transformer instance
+     */
+    public static <T> ResultTransformer<T> asSingleResult(final Expression<T> projection) {
+        return new AsSingleResultTransformer<>(projection);
+    }
+
+    /**
      * Constructs new instance.
      */
     private Transformers() {
