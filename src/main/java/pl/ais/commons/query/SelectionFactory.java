@@ -19,6 +19,7 @@ public interface SelectionFactory<R extends Serializable> {
      * @param orderings orderings which should be used by this selection
      * @return newly created {@link Selection} instance
      */
+    @SuppressWarnings("unchecked")
     Selection<R> createSelection(int startIndex, int displayLength, R... orderings);
 
 }

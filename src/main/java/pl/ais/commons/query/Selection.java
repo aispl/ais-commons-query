@@ -45,6 +45,7 @@ public interface Selection<R extends Serializable> extends Serializable {
      * @param orderings the orderings to add
      * @return newly created {@link Selection} instance
      */
+    @SuppressWarnings("unchecked")
     @Nonnull
     Selection<R> withOrderings(@Nonnull final R... orderings);
 
