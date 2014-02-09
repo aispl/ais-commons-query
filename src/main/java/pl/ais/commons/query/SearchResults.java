@@ -17,11 +17,11 @@ import com.google.common.collect.ImmutableList;
  *
  * @author Warlock, AIS.PL
  * @since 1.0.1
- * @param <T> determines the type of each search result
+ * @param <E> the type of each search result
  */
 @Immutable
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
-public final class SearchResults<T extends Serializable> implements Serializable {
+public final class SearchResults<E extends Serializable> implements Serializable {
 
     @SuppressWarnings("rawtypes")
     private static final SearchResults EMPTY = new SearchResults();
@@ -40,7 +40,7 @@ public final class SearchResults<T extends Serializable> implements Serializable
         return EMPTY;
     }
 
-    private final ImmutableList<T> elements;
+    private final ImmutableList<E> elements;
 
     private final long totalRecords;
 
@@ -48,7 +48,7 @@ public final class SearchResults<T extends Serializable> implements Serializable
      * Constructs the instance with empty list of elements.
      */
     private SearchResults() {
-        this(Collections.<T> emptyList(), 0L);
+        this(Collections.<E> emptyList(), 0L);
     }
 
     /**
@@ -56,8 +56,9 @@ public final class SearchResults<T extends Serializable> implements Serializable
      *
      * @param elements elements to be included in this search results
      * @param totalRecords total number of records
+     * @throws NullPointerException if any of {@code elements} is {@code null}
      */
-    public SearchResults(@Nonnull final List<T> elements, @Nonnegative final long totalRecords) {
+    public SearchResults(@Nonnull final List<E> elements, @Nonnegative final long totalRecords) {
 
         // Verify constructor requirements, ...
         if (null == elements) {
@@ -76,7 +77,7 @@ public final class SearchResults<T extends Serializable> implements Serializable
      * @return the unmodifiable view of elements
      */
     @Nonnull
-    public List<T> getElements() {
+    public List<E> getElements() {
         return elements;
     }
 
