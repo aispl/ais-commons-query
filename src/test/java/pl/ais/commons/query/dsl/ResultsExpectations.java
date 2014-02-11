@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import pl.ais.commons.query.Selections;
 import pl.ais.commons.query.dsl.internal.Person;
 
 import com.mysema.query.alias.Alias;
@@ -33,30 +34,7 @@ public class ResultsExpectations {
     }
 
     private static QuerydslSelection createSelection(final int startIndex, final int displayLength) {
-        final QuerydslSelectionFactory selectionFactory = new QuerydslSelectionFactory();
-        return selectionFactory.createSelection(startIndex, displayLength);
-    }
-
-    /**
-     * Verifies if applying selection to the results limits those, which are fetched.
-     */
-    @Test
-    public void shouldLimitFetchedResultsWhenSelectionIsApplied() {
-
-        // Given collection of some elements, persons in our case, ...
-        final List<Person> persons = createPersonList();
-
-        // ... when we query for names of persons matching specified criteria, ...
-        final Person person = Alias.alias(Person.class);
-        final CollQuery query = new CollQuery().from($(person), persons);
-        final Predicate predicate = $(person.getAge()).goe(60);
-        final QuerydslSelection selection = createSelection(0, 1);
-
-        final List<String> results = Results.forQuery(query).matching(predicate).within(selection)
-            .transform(asList($(person.getName())));
-
-        // ... then we should get exactly one result, 'Uncle Bob'.
-        assertTrue("", (1 == results.size()) && results.get(0).equals("Uncle Bob"));
+        return Selections.slice(startIndex, displayLength, new QuerydslSelectionFactory());
     }
 
     /**
@@ -79,6 +57,28 @@ public class ResultsExpectations {
 
         // ... then we should get exactly two results.
         assertEquals("There should be exactly 2 results matching the criteria.", Long.valueOf(2), numberOfResults);
+    }
+
+    /**
+     * Verifies if applying selection to the results limits those, which are fetched.
+     */
+    @Test
+    public void shouldLimitFetchedResultsWhenSelectionIsApplied() {
+
+        // Given collection of some elements, persons in our case, ...
+        final List<Person> persons = createPersonList();
+
+        // ... when we query for names of persons matching specified criteria, ...
+        final Person person = Alias.alias(Person.class);
+        final CollQuery query = new CollQuery().from($(person), persons);
+        final Predicate predicate = $(person.getAge()).goe(60);
+        final QuerydslSelection selection = createSelection(0, 1);
+
+        final List<String> results = Results.forQuery(query).matching(predicate).within(selection)
+            .transform(asList($(person.getName())));
+
+        // ... then we should get exactly one result, 'Uncle Bob'.
+        assertTrue("", (1 == results.size()) && results.get(0).equals("Uncle Bob"));
     }
 
     /**
