@@ -15,8 +15,21 @@ import javax.annotation.Nonnull;
  */
 public final class Selections {
 
+    private static final Selection<?> ALL_RECORDS = new UnsortableSelection<>(0, -1);
+
     /**
-     * Creates and returns a {@link Selection} instance selecting all records.
+     * Returns shared, unsortable {@link Selection} instance selecting all records.
+     *
+     * @return shared, unsortable {@link Selection} instance selecting all records
+     */
+    @Nonnull
+    @SuppressWarnings("unchecked")
+    public static <R extends Serializable> Selection<R> allRecords() {
+        return (Selection<R>) ALL_RECORDS;
+    }
+
+    /**
+     * Creates and returns {@link Selection} instance selecting all records.
      *
      * @param factory the factory which will be used to create Selection
      * @return newly created {@link Selection} instance
@@ -40,6 +53,18 @@ public final class Selections {
         return factory.createSelection(0, -1, orderings);
     }
 
+    /**
+     * Creates and returns unsortable {@link Selection} instance selecting specified records.
+     *
+     * @param startIndex the index of first record
+     * @param displayLength the display length ({@code -1} when all records should be selected)
+     * @return newly created unsortable {@link Selection} instance
+     */
+    @Nonnull
+    public static <R extends Serializable> Selection<R> slice(
+        @Nonnegative final int startIndex, final int displayLength) {
+        return new UnsortableSelection<>(startIndex, displayLength);
+    }
 
     /**
      * Creates and returns {@link Selection} instance selecting specified records.
