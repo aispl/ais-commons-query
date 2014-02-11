@@ -1,6 +1,7 @@
 package pl.ais.commons.query;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -9,7 +10,7 @@ import javax.annotation.Nonnull;
  * Defines the subset of database records by specifying the records ordering, index of the first one,
  * and the desired number of records.
  *
- * @param <R> the type of ordering element
+ * @param <R> the type of ordering
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
@@ -25,7 +26,7 @@ public interface Selection<R extends Serializable> extends Serializable {
      * @return current orderings used by this selection
      */
     @Nonnull
-    R[] getOrderings();
+    List<? extends R> getOrderings();
 
     /**
      * @return the index of first record
@@ -45,8 +46,7 @@ public interface Selection<R extends Serializable> extends Serializable {
      * @param orderings the orderings to add
      * @return newly created {@link Selection} instance
      */
-    @SuppressWarnings("unchecked")
     @Nonnull
-    Selection<R> withOrderings(@Nonnull final R... orderings);
+    Selection<R> withOrderings(@Nonnull final List<? extends R> orderings);
 
 }

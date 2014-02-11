@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
+import pl.ais.commons.query.Selections;
+
 /**
  * Verifies {@link QuerydslSelection} expectations.
  *
@@ -25,7 +27,7 @@ public class QuerydslSelectionExpectations {
 
         // Given QueryDSLSelection, ...
         final QuerydslSelectionFactory selectionFactory = new QuerydslSelectionFactory();
-        final QuerydslSelection selection = selectionFactory.createSelection(0, 1);
+        final QuerydslSelection selection = Selections.slice(0, 1, selectionFactory);
 
         // ... when we serialize and deserialize QueryDSLSelection, ...
         final QuerydslSelection deserialized = (QuerydslSelection) deserialize(serialize(selection));

@@ -3,14 +3,19 @@ package pl.ais.commons.query;
 import static com.google.common.base.Objects.toStringHelper;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.google.common.collect.ImmutableList;
+
 /**
- * Class to be extended by all {@linkplain Selection selections}.
+ * Class to be extended by all {@link Selection selections}.
  *
- * @param <R> the type of ordering element
+ * @param <R> the type of ordering
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
@@ -23,11 +28,11 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
      *
      * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
      */
-    private static final long serialVersionUID = 4943985575820732558L;
+    private static final long serialVersionUID = -5213498162004706554L;
 
     private final int displayLength;
 
-    private final R[] orderings;
+    private final List<? extends R> orderings;
 
     private final int startIndex;
 
@@ -37,8 +42,8 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
      * @param startIndex the index of first record
      * @param displayLength the number of records (if {@code -1}, all records will be used)
      */
-    @SafeVarargs
-    protected AbstractSelection(final int startIndex, final int displayLength, final R... orderings) {
+    protected AbstractSelection(@Nonnegative final int startIndex, final int displayLength,
+        @Nonnull final List<? extends R> orderings) {
 
         // Verify constructor requirements, ...
         if (startIndex < 0) {
@@ -48,7 +53,7 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
         // ... and initialize this instance fields.
         this.startIndex = startIndex;
         this.displayLength = displayLength;
-        this.orderings = Arrays.copyOf(orderings, orderings.length);
+        this.orderings = ImmutableList.copyOf(orderings);
     }
 
     /**
@@ -60,7 +65,7 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
         if (!result && (null != object) && (getClass() == object.getClass())) {
             final AbstractSelection<?> other = (AbstractSelection<?>) object;
             result = (startIndex == other.startIndex) && (displayLength == other.displayLength)
-                && Arrays.equals(orderings, other.orderings);
+                && orderings.equals(other.orderings);
         }
         return result;
     }
@@ -74,11 +79,11 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
     }
 
     /**
-     * @return the orderings
+     * {@inheritDoc}
      */
     @Override
-    public R[] getOrderings() {
-        return Arrays.copyOf(orderings, orderings.length);
+    public List<? extends R> getOrderings() {
+        return orderings;
     }
 
     /**
@@ -93,8 +98,9 @@ public abstract class AbstractSelection<R extends Serializable> implements Selec
      * @see java.lang.Object#hashCode()
      */
     @Override
+    @SuppressWarnings("boxing")
     public int hashCode() {
-        return (31 * ((31 * (31 + startIndex)) + displayLength)) + Arrays.hashCode(orderings);
+        return Objects.hash(startIndex, displayLength, orderings);
     }
 
     /**

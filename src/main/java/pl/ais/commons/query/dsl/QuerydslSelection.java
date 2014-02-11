@@ -1,9 +1,10 @@
 package pl.ais.commons.query.dsl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import pl.ais.commons.query.AbstractSelection;
@@ -32,7 +33,8 @@ public final class QuerydslSelection extends AbstractSelection<OrderSpecifier<?>
      * @param displayLength the number of records (if {@code -1}, all records will be used)
      * @param orderings orderings which should be used
      */
-    public QuerydslSelection(final int startIndex, final int displayLength, final OrderSpecifier<?>... orderings) {
+    public QuerydslSelection(@Nonnegative final int startIndex, final int displayLength,
+        final List<? extends OrderSpecifier<?>> orderings) {
         super(startIndex, displayLength, orderings);
     }
 
@@ -40,19 +42,16 @@ public final class QuerydslSelection extends AbstractSelection<OrderSpecifier<?>
      * {@inheritDoc}
      */
     @Override
-    public QuerydslSelection withOrderings(final OrderSpecifier<?>... orderings) {
+    public QuerydslSelection withOrderings(@Nonnull final List<? extends OrderSpecifier<?>> orderings) {
         final List<OrderSpecifier<?>> modified = new ArrayList<>();
         // Copy those orderings from the current settings, which are not redefined by the method parameters ...
         processing: for (final OrderSpecifier<?> ordering : getOrderings()) {
-            for (int i = 0; i < orderings.length; i++) {
-                if (ordering.getTarget().equals(((OrderSpecifier<?>) orderings[i]).getTarget())) {
-                    continue processing;
-                }
+            if (orderings.contains(ordering)) {
+                continue processing;
             }
             modified.add(ordering);
         }
-        modified.addAll(Arrays.asList(orderings));
-        return new QuerydslSelection(getStartIndex(), getDisplayLength(),
-            modified.toArray(new OrderSpecifier<?>[modified.size()]));
+        modified.addAll(orderings);
+        return new QuerydslSelection(getStartIndex(), getDisplayLength(), modified);
     }
 }

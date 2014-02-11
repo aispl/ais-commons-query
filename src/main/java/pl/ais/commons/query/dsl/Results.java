@@ -84,7 +84,7 @@ public class Results<Q extends Projectable & SimpleQuery<Q>> {
         if (selection.isSelectingSubset()) {
             query = query.offset(selection.getStartIndex()).limit(selection.getDisplayLength());
         }
-        query = query.orderBy(selection.getOrderings());
+        query = query.orderBy(selection.getOrderings().toArray(new OrderSpecifier<?>[0]));
         return this;
     }
 
