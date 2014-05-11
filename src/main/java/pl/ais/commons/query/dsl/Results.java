@@ -5,9 +5,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import pl.ais.commons.query.Selection;
 
-import com.mysema.query.Projectable;
 import com.mysema.query.ResultTransformer;
-import com.mysema.query.SimpleQuery;
+import com.mysema.query.support.ProjectableQuery;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
 
@@ -20,7 +19,7 @@ import com.mysema.query.types.Predicate;
  */
 @NotThreadSafe
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
-public class Results<Q extends Projectable & SimpleQuery<Q>> {
+public class Results<Q extends ProjectableQuery<Q>> {
 
     /**
      * Returns new {@link Results} instance for given query.
@@ -28,7 +27,7 @@ public class Results<Q extends Projectable & SimpleQuery<Q>> {
      * @param query query determining the results
      * @return newly created {@link Results} instance for given query
      */
-    public static <Q extends Projectable & SimpleQuery<Q>> Results<Q> forQuery(@Nonnull final Q query) {
+    public static <Q extends ProjectableQuery<Q>> Results<Q> forQuery(@Nonnull final Q query) {
         return new Results<>(query);
     }
 
