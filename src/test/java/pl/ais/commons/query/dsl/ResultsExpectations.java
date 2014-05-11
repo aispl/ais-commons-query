@@ -2,8 +2,8 @@ package pl.ais.commons.query.dsl;
 
 import static com.mysema.query.alias.Alias.$;
 import static com.mysema.query.alias.Alias.getAny;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static pl.ais.commons.query.dsl.transformer.Transformers.asList;
 import static pl.ais.commons.query.dsl.transformer.Transformers.asNumberOfResults;
 
