@@ -11,6 +11,8 @@ We will use simple domain model for the examples below
 
 ### Reading all courses into list
 
+Having for ex. _JPAQuery_ you may create new _Results_ instance with _forQuery_ method, and request query results transforming
+into number of records, single result, _List_, or _SearchResults_ using one of the [Transformers](src/main/java/pl/ais/commons/query/dsl/transformer/Transformers.java).
 ```java
 import static pl.ais.commons.query.dsl.transformer.Transformers.asList;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
@@ -20,6 +22,9 @@ final List<Course> courses = Results.forQuery(query).transform(asList(course));
 ```
 
 ### Counting all courses
+
+Simple example, counting all records returned by the query.
+
 ```java
 import static pl.ais.commons.query.dsl.transformer.Transformers.asNumberOfResults;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
@@ -29,6 +34,10 @@ final Long coursesNo = Results.forQuery(query).transform(asNumberOfResults());
 ```
 
 ### Fetching one of the properties for course matching specified criteria
+
+A little more complicated use case, where you specify criteria to be matched by returned results (using _matching_ method),
+and fetch only single _Course_ property (_name_) instead of the whole _Course_ entity.
+
 ```java
 import static pl.ais.commons.query.dsl.transformer.Transformers.asSingleResult;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
@@ -38,6 +47,11 @@ final String courseName = Results.forQuery(query).matching(course.id.eq(1)).tran
 ```
 
 ### Fetching participant names for courses having more than 5 participants, along with the total number of matching participants.
+
+Again we specify additional criteria to be matched by returned results, but this time we request to transform them into _SearchResults_ instance. _SearchResults_ is a container for holding query results, along with total number of records
+matching given criteria. It is very useful, when you want to paginate results using _Selection_ (see examples below),
+in this case you fetch only subset of all records matching criteria, and are aware about the total number of matching records too.
+
 ```java
 import static pl.ais.commons.query.dsl.transformer.Transformers.asSearchResults;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
@@ -46,3 +60,26 @@ import static pl.ais.example.webapp.domain.model.QParticipant.participant;
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course).leftJoin(course.participants, participant).orderBy(participant.name.asc());
 final SearchResults<String> searchResults = Results.forQuery(query).matching(course.participants.size().gt(5)).transform(asSearchResults(participant.name));
 ```
+
+### Fetching first 10 course names, ordered by name
+
+This time we use _Selection_ for fetching only subset of matching records (ex. for paginating them on UI).
+_Selection_ instances should be created with specific _SelectionFactory_. If you use [Spring Framework](http://projects.spring.io/spring-framework/) in your application, you may define _SelectionFactory_ as singleton:
+```xml
+<bean id="selectionFactory" class="pl.ais.commons.query.dsl.QuerydslSelectionFactory" />
+```
+and then inject as dependency into your code:
+```java
+import static pl.ais.commons.query.dsl.transformer.Transformers.asList;
+import static pl.ais.example.webapp.domain.model.QCourse.course;
+...
+@Autowired
+private transient QuerydslSelectionFactory selectionFactory;
+....
+final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
+final QuerydslSelection selection = selectionFactory.createSelection(0, 10, Arrays.asList(course.name.asc(), course.id.asc()));
+final List<String> searchResults = Results.forQuery(query).within(selection).transform(asList(course.name));
+```
+Above _Selection_ usage example restricts returned results to first 10 records, ordered by course name.
+Please, note that we use course ID as the second ordering part, this is required to avoid problems with ordering data
+described in [JPQL - pagination on Oracle Database with Hibernate ](http://vard-lokkur.blogspot.com/2012/08/jpql-pagination-on-oracle-database-with.html) - see also discussion on: [DZone](http://java.dzone.com/articles/jpql-pagination-oracle).
