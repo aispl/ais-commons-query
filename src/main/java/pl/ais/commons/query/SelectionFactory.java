@@ -1,7 +1,6 @@
 package pl.ais.commons.query;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Defines the API contract for factory creating the {@link Selection selections}.
@@ -21,6 +20,12 @@ public interface SelectionFactory<R extends Serializable, S extends Selection<R>
      * @param orderings orderings which should be used by this selection
      * @return newly created {@link Selection} instance
      */
-    S createSelection(int startIndex, int displayLength, List<? extends R> orderings);
+    @SuppressWarnings("unchecked")
+    S createSelection(int startIndex, int displayLength, R... orderings);
+
+    /**
+     * @return ordering type supported by this factory
+     */
+    Class<?> getOrderingType();
 
 }

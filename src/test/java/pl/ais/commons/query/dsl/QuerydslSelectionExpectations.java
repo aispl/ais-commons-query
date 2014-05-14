@@ -26,7 +26,7 @@ public class QuerydslSelectionExpectations {
     public void queryDslSelectionShouldBeSerializable() {
 
         // Given QueryDSLSelection, ...
-        final QuerydslSelectionFactory selectionFactory = new QuerydslSelectionFactory();
+        final QuerydslSelectionFactory selectionFactory = QuerydslSelectionFactory.getInstance();
         final QuerydslSelection selection = Selections.slice(0, 1, selectionFactory);
 
         // ... when we serialize and deserialize QueryDSLSelection, ...

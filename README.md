@@ -94,7 +94,7 @@ import static pl.ais.example.webapp.domain.model.QCourse.course;
 private transient QuerydslSelectionFactory selectionFactory;
 ....
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
-final QuerydslSelection selection = selectionFactory.createSelection(0, 10, Arrays.asList(course.name.asc(), course.id.asc()));
+final QuerydslSelection selection = selectionFactory.createSelection(0, 10, course.name.asc(), course.id.asc());
 final List<String> searchResults = Results.forQuery(query).within(selection).transform(asList(course.name));
 ```
 The above code leads to following JPQL query:

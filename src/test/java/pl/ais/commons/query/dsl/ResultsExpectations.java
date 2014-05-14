@@ -34,7 +34,7 @@ public class ResultsExpectations {
     }
 
     private static QuerydslSelection createSelection(final int startIndex, final int displayLength) {
-        return Selections.slice(startIndex, displayLength, new QuerydslSelectionFactory());
+        return Selections.slice(startIndex, displayLength, QuerydslSelectionFactory.getInstance());
     }
 
     /**

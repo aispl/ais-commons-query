@@ -1,8 +1,7 @@
 package pl.ais.commons.query;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Array;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -13,9 +12,11 @@ import javax.annotation.Nonnull;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class Selections {
 
-    private static final Selection<?> ALL_RECORDS = new UnsortableSelection<>(0, -1);
+    @SuppressWarnings("rawtypes")
+    private static final Selection ALL_RECORDS = new UnsortableSelection<>(0, -1);
 
     /**
      * Returns shared, unsortable {@link Selection} instance selecting all records.
@@ -25,7 +26,7 @@ public final class Selections {
     @Nonnull
     @SuppressWarnings("unchecked")
     public static <R extends Serializable> Selection<R> allRecords() {
-        return (Selection<R>) ALL_RECORDS;
+        return ALL_RECORDS;
     }
 
     /**
@@ -37,7 +38,7 @@ public final class Selections {
     @Nonnull
     public static <R extends Serializable, S extends Selection<R>> S allRecords(
         @Nonnull final SelectionFactory<R, S> factory) {
-        return factory.createSelection(0, -1, Collections.<R> emptyList());
+        return factory.createSelection(0, -1, emptyOrderings(factory));
     }
 
     /**
@@ -47,10 +48,17 @@ public final class Selections {
      * @param orderings orderings which should be used by this selection
      * @return newly created {@link Selection} instance
      */
+    @SuppressWarnings("unchecked")
     @Nonnull
     public static <R extends Serializable, S extends Selection<R>> S allRecords(
-        @Nonnull final SelectionFactory<R, S> factory, final List<? extends R> orderings) {
+        @Nonnull final SelectionFactory<R, S> factory, final R... orderings) {
         return factory.createSelection(0, -1, orderings);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <R extends Serializable, S extends Selection<R>> R[] emptyOrderings(
+        final SelectionFactory<R, S> factory) {
+        return (R[]) Array.newInstance(factory.getOrderingType(), 0);
     }
 
     /**
@@ -77,7 +85,8 @@ public final class Selections {
     @Nonnull
     public static <R extends Serializable, S extends Selection<R>> S slice(
         @Nonnegative final int startIndex, final int displayLength, @Nonnull final SelectionFactory<R, S> factory) {
-        return factory.createSelection(startIndex, displayLength, Collections.<R> emptyList());
+        return factory
+            .createSelection(startIndex, displayLength, emptyOrderings(factory));
     }
 
     /**
@@ -90,9 +99,10 @@ public final class Selections {
      * @return newly created {@link Selection} instance
      */
     @Nonnull
+    @SuppressWarnings("unchecked")
     public static <R extends Serializable, S extends Selection<R>> S slice(
         @Nonnegative final int startIndex, final int displayLength, @Nonnull final SelectionFactory<R, S> factory,
-        final List<? extends R> orderings) {
+        final R... orderings) {
         return factory.createSelection(startIndex, displayLength, orderings);
     }
 

@@ -26,14 +26,14 @@ public final class QuerydslSelection extends AbstractSelection<OrderSpecifier<?>
      *
      * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
      */
-    private static final long serialVersionUID = -5422288218291549413L;
+    private static final long serialVersionUID = -3375748194910956154L;
 
     /**
      * @param startIndex the index of first record
      * @param displayLength the number of records (if {@code -1}, all records will be used)
      * @param orderings orderings which should be used
      */
-    public QuerydslSelection(@Nonnegative final int startIndex, final int displayLength,
+    QuerydslSelection(@Nonnegative final int startIndex, final int displayLength,
         final List<? extends OrderSpecifier<?>> orderings) {
         super(startIndex, displayLength, orderings);
     }
