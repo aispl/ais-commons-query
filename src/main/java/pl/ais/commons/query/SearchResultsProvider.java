@@ -17,6 +17,6 @@ public interface SearchResultsProvider<E extends Serializable> {
      * @param selection determines which of the matching users should be fetched and how they should be ordered
      * @return {@link SearchResults} determined by given selection
      */
-    SearchResults<E> provideForSelection(Selection<?> selection);
+    SearchResults<E> provideForSelection(Selection selection);
 
 }
