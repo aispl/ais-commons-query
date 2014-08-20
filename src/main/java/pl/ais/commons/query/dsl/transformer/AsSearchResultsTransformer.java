@@ -1,12 +1,11 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import java.io.Serializable;
-
-import pl.ais.commons.query.SearchResults;
-
 import com.mysema.query.Projectable;
 import com.mysema.query.ResultTransformer;
 import com.mysema.query.types.Expression;
+import pl.ais.commons.query.SearchResults;
+
+import java.io.Serializable;
 
 /**
  * {@link ResultTransformer} implementation transforming query results into {@link SearchResults}.
@@ -23,7 +22,8 @@ final class AsSearchResultsTransformer<T extends Serializable> implements Result
     /**
      * @param projection
      */
-    public AsSearchResultsTransformer(final Expression<T> projection) {
+     AsSearchResultsTransformer(final Expression<T> projection) {
+        super();
         this.projection = projection;
     }
 

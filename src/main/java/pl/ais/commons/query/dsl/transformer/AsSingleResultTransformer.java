@@ -19,7 +19,7 @@ final class AsSingleResultTransformer<T> implements ResultTransformer<T> {
     /**
      * @param projection
      */
-    public AsSingleResultTransformer(final Expression<T> projection) {
+    AsSingleResultTransformer(final Expression<T> projection) {
         this.projection = projection;
     }
 

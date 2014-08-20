@@ -1,10 +1,10 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import java.util.List;
-
 import com.mysema.query.Projectable;
 import com.mysema.query.ResultTransformer;
 import com.mysema.query.types.Expression;
+
+import java.util.List;
 
 /**
  * {@link ResultTransformer} implementation transforming query results into {@link List}.
@@ -21,7 +21,7 @@ final class AsListTransformer<T> implements ResultTransformer<List<T>> {
     /**
      * @param projection
      */
-    public AsListTransformer(final Expression<T> projection) {
+     AsListTransformer(final Expression<T> projection) {
         this.projection = projection;
     }
 
