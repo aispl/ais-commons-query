@@ -4,7 +4,7 @@ import static com.mysema.query.alias.Alias.$;
 import static com.mysema.query.alias.Alias.getAny;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static pl.ais.commons.query.dsl.transformer.Transformers.asSingleResult;
+import static pl.ais.commons.query.dsl.transformer.Transformers.singleResult;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +46,7 @@ public class AsSingleResultTransformerExpectations {
         final CollQuery query = new CollQuery().from($(person), persons);
 
         final Person result = Results.forQuery(query)
-            .transform(asSingleResult(getAny(person)));
+            .as(singleResult(getAny(person)));
 
         // ... then we should get first element from the list.
         assertEquals("Returned element should be first one.", persons.get(0), result);
@@ -68,7 +68,7 @@ public class AsSingleResultTransformerExpectations {
         final Predicate predicate = $(person.getAge()).goe(200);
 
         final Person result = Results.forQuery(query).matching(predicate)
-            .transform(asSingleResult(getAny(person)));
+            .as(singleResult(getAny(person)));
 
         // ... then we should get null as the result.
         assertNull("Null should be returned.", result);

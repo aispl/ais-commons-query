@@ -1,7 +1,7 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import com.mysema.query.Projectable;
-import com.mysema.query.ResultTransformer;
+import pl.ais.commons.query.dsl.ProjectableSupplier;
+import pl.ais.commons.query.dsl.ResultTransformer;
 
 /**
  * {@link ResultTransformer} returning number of results.
@@ -15,8 +15,8 @@ final class AsNumberOfResults implements ResultTransformer<Long> {
      * {@inheritDoc}
      */
     @Override
-    public Long transform(final Projectable projectable) {
-        return Long.valueOf(projectable.count());
+    public Long apply(final ProjectableSupplier projectable) {
+        return Long.valueOf(projectable.get().count());
     }
 
 }

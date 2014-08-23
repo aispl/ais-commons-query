@@ -1,23 +1,21 @@
 package pl.ais.commons.query.dsl;
 
-import static com.mysema.query.alias.Alias.$;
-import static com.mysema.query.alias.Alias.getAny;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static pl.ais.commons.query.dsl.transformer.Transformers.asList;
-import static pl.ais.commons.query.dsl.transformer.Transformers.asNumberOfResults;
+import com.mysema.query.alias.Alias;
+import com.mysema.query.collections.CollQuery;
+import com.mysema.query.types.Predicate;
+import org.junit.Test;
+import pl.ais.commons.query.Selections;
+import pl.ais.commons.query.dsl.internal.Person;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
-import pl.ais.commons.query.Selections;
-import pl.ais.commons.query.dsl.internal.Person;
-
-import com.mysema.query.alias.Alias;
-import com.mysema.query.collections.CollQuery;
-import com.mysema.query.types.Predicate;
+import static com.mysema.query.alias.Alias.$;
+import static com.mysema.query.alias.Alias.getAny;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static pl.ais.commons.query.dsl.transformer.Transformers.list;
+import static pl.ais.commons.query.dsl.transformer.Transformers.numberOfResults;
 
 /**
  * Verifies {@link Results} expectations.
@@ -52,8 +50,10 @@ public class ResultsExpectations {
         final Predicate predicate = $(person.getAge()).goe(60);
         final QuerydslSelection selection = createSelection(0, 1);
 
-        final Long numberOfResults = Results.forQuery(query).matching(predicate).within(selection)
-            .transform(asNumberOfResults());
+        final Long numberOfResults = Results.forQuery(query)
+                                            .matching(predicate)
+                                            .within(selection)
+                                            .as(numberOfResults());
 
         // ... then we should get exactly two results.
         assertEquals("There should be exactly 2 results matching the criteria.", Long.valueOf(2), numberOfResults);
@@ -74,8 +74,10 @@ public class ResultsExpectations {
         final Predicate predicate = $(person.getAge()).goe(60);
         final QuerydslSelection selection = createSelection(0, 1);
 
-        final List<String> results = Results.forQuery(query).matching(predicate).within(selection)
-            .transform(asList($(person.getName())));
+        final List<String> results = Results.forQuery(query)
+                                            .matching(predicate)
+                                            .within(selection)
+                                            .as(list($(person.getName())));
 
         // ... then we should get exactly one result, 'Uncle Bob'.
         assertTrue("", (1 == results.size()) && results.get(0).equals("Uncle Bob"));
@@ -95,7 +97,9 @@ public class ResultsExpectations {
         final CollQuery query = new CollQuery().from($(person), persons);
         final Predicate predicate = $(person.getAge()).goe(60);
 
-        final Long numberOfResults = Results.forQuery(query).matching(predicate).transform(asNumberOfResults());
+        final Long numberOfResults = Results.forQuery(query)
+                                            .matching(predicate)
+                                            .as(numberOfResults());
 
         // ... then we should get exactly two results.
         assertEquals("There should be exactly 2 results matching the criteria.", Long.valueOf(2), numberOfResults);
@@ -114,7 +118,8 @@ public class ResultsExpectations {
         final Person person = Alias.alias(Person.class);
         final CollQuery query = new CollQuery().from($(person), persons);
 
-        final List<Person> results = Results.forQuery(query).transform(asList(getAny(person)));
+        final List<Person> results = Results.forQuery(query)
+                                            .as(list(getAny(person)));
 
         // ... then results should be equal to our persons list.
         assertEquals("Result should be equal to all persons list.", persons, results);

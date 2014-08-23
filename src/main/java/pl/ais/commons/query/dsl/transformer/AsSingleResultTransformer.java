@@ -1,8 +1,8 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import com.mysema.query.Projectable;
-import com.mysema.query.ResultTransformer;
 import com.mysema.query.types.Expression;
+import pl.ais.commons.query.dsl.ProjectableSupplier;
+import pl.ais.commons.query.dsl.ResultTransformer;
 
 /**
  * {@link ResultTransformer} implementation transforming query results into single element (first one).
@@ -27,8 +27,8 @@ final class AsSingleResultTransformer<T> implements ResultTransformer<T> {
      * {@inheritDoc}
      */
     @Override
-    public T transform(final Projectable projectable) {
-        return projectable.singleResult(projection);
+    public T apply(final ProjectableSupplier projectable) {
+        return projectable.get().singleResult(projection);
     }
 
 }

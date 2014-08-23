@@ -1,8 +1,8 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import com.mysema.query.Projectable;
-import com.mysema.query.ResultTransformer;
 import com.mysema.query.types.Expression;
+import pl.ais.commons.query.dsl.ProjectableSupplier;
+import pl.ais.commons.query.dsl.ResultTransformer;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ final class AsListTransformer<T> implements ResultTransformer<List<T>> {
     /**
      * @param projection
      */
-     AsListTransformer(final Expression<T> projection) {
+    AsListTransformer(final Expression<T> projection) {
         this.projection = projection;
     }
 
@@ -29,8 +29,8 @@ final class AsListTransformer<T> implements ResultTransformer<List<T>> {
      * {@inheritDoc}
      */
     @Override
-    public List<T> transform(final Projectable projectable) {
-        return projectable.list(projection);
+    public List<T> apply(final ProjectableSupplier projectable) {
+        return projectable.get().list(projection);
     }
 
 }

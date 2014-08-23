@@ -1,9 +1,9 @@
 package pl.ais.commons.query.dsl.transformer;
 
-import com.mysema.query.Projectable;
-import com.mysema.query.ResultTransformer;
 import com.mysema.query.types.Expression;
 import pl.ais.commons.query.SearchResults;
+import pl.ais.commons.query.dsl.ProjectableSupplier;
+import pl.ais.commons.query.dsl.ResultTransformer;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ final class AsSearchResultsTransformer<T extends Serializable> implements Result
     /**
      * @param projection
      */
-     AsSearchResultsTransformer(final Expression<T> projection) {
+    AsSearchResultsTransformer(final Expression<T> projection) {
         super();
         this.projection = projection;
     }
@@ -31,11 +31,11 @@ final class AsSearchResultsTransformer<T extends Serializable> implements Result
      * {@inheritDoc}
      */
     @Override
-    public SearchResults<T> transform(final Projectable projectable) {
-        final long totalRecords = projectable.count();
+    public SearchResults<T> apply(final ProjectableSupplier projectable) {
+        final long totalRecords = projectable.get().count();
         final SearchResults<T> searchResults;
         if (0 < totalRecords) {
-            searchResults = new SearchResults<>(projectable.list(projection),
+            searchResults = new SearchResults<>(projectable.get().list(projection),
                 totalRecords);
         } else {
             searchResults = SearchResults.emptySearchResults();

@@ -1,12 +1,11 @@
 package pl.ais.commons.query.dsl.transformer;
 
+import com.mysema.query.types.Expression;
+import pl.ais.commons.query.SearchResults;
+import pl.ais.commons.query.dsl.ResultTransformer;
+
 import java.io.Serializable;
 import java.util.List;
-
-import pl.ais.commons.query.SearchResults;
-
-import com.mysema.query.ResultTransformer;
-import com.mysema.query.types.Expression;
 
 /**
  * Provides set of utility methods for creating result transformers.
@@ -17,12 +16,19 @@ import com.mysema.query.types.Expression;
 public final class Transformers {
 
     /**
+     * Constructs new instance.
+     */
+    private Transformers() {
+        super();
+    }
+
+    /**
      * Creates {@link ResultTransformer} transforming query results into {@link List}.
      *
      * @param projection results projection
      * @return newly created transformer instance
      */
-    public static <T> ResultTransformer<List<T>> asList(final Expression<T> projection) {
+    public static <T> ResultTransformer<List<T>> list(final Expression<T> projection) {
         return new AsListTransformer<>(projection);
     }
 
@@ -31,7 +37,7 @@ public final class Transformers {
      *
      * @return newly created transformer instance
      */
-    public static ResultTransformer<Long> asNumberOfResults() {
+    public static ResultTransformer<Long> numberOfResults() {
         return new AsNumberOfResults();
     }
 
@@ -41,7 +47,7 @@ public final class Transformers {
      * @param projection results projection
      * @return newly created transformer instance
      */
-    public static <T extends Serializable> ResultTransformer<SearchResults<T>> asSearchResults(
+    public static <T extends Serializable> ResultTransformer<SearchResults<T>> searchResults(
         final Expression<T> projection) {
         return new AsSearchResultsTransformer<>(projection);
     }
@@ -52,15 +58,8 @@ public final class Transformers {
      * @param projection results projection
      * @return newly created transformer instance
      */
-    public static <T> ResultTransformer<T> asSingleResult(final Expression<T> projection) {
+    public static <T> ResultTransformer<T> singleResult(final Expression<T> projection) {
         return new AsSingleResultTransformer<>(projection);
-    }
-
-    /**
-     * Constructs new instance.
-     */
-    private Transformers() {
-        super();
     }
 
 }
