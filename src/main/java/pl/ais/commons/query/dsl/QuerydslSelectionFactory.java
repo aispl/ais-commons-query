@@ -1,12 +1,10 @@
 package pl.ais.commons.query.dsl;
 
-import java.util.Arrays;
-
-import javax.annotation.concurrent.Immutable;
-
+import com.mysema.query.types.OrderSpecifier;
 import pl.ais.commons.query.SelectionFactory;
 
-import com.mysema.query.types.OrderSpecifier;
+import javax.annotation.concurrent.Immutable;
+import java.util.Arrays;
 
 /**
  * {@link SelectionFactory} implementation creating selections suitable for usage with Querydsl.
@@ -20,17 +18,17 @@ public final class QuerydslSelectionFactory implements SelectionFactory<OrderSpe
     private static final QuerydslSelectionFactory INSTANCE = new QuerydslSelectionFactory();
 
     /**
-     * @return shared (singleton) instance of this factory
-     */
-    public static QuerydslSelectionFactory getInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * Constructs new instance.
      */
     private QuerydslSelectionFactory() {
         super();
+    }
+
+    /**
+     * @return shared (singleton) instance of this factory
+     */
+    public static QuerydslSelectionFactory getInstance() {
+        return INSTANCE;
     }
 
     /**
