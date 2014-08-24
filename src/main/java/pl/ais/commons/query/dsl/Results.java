@@ -1,6 +1,7 @@
 package pl.ais.commons.query.dsl;
 
-import com.mysema.query.Projectable;
+import com.mysema.query.SimpleProjectable;
+import com.mysema.query.SimpleQuery;
 import com.mysema.query.support.ProjectableQuery;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
@@ -12,15 +13,14 @@ import javax.annotation.concurrent.NotThreadSafe;
 /**
  * Utility class for manipulating query results.
  *
- * @param <Q> determines query type
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
 @NotThreadSafe
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
-public class Results<Q extends ProjectableQuery<Q>> {
+public class Results {
 
-    private Q query;
+    private QueryDelegate query;
 
     private Selection<OrderSpecifier<?>> selection;
 
@@ -29,7 +29,7 @@ public class Results<Q extends ProjectableQuery<Q>> {
      *
      * @param query query determining the results
      */
-    protected Results(@Nonnull final Q query) {
+    protected Results(@Nonnull final QueryDelegate query) {
         super();
 
         // Verify constructor requirements, ...
@@ -47,8 +47,12 @@ public class Results<Q extends ProjectableQuery<Q>> {
      * @param query query determining the results
      * @return newly created {@link Results} instance for given query
      */
-    public static <Q extends ProjectableQuery<Q>> Results<Q> forQuery(@Nonnull final Q query) {
-        return new Results<>(query);
+    public static <Q extends ProjectableQuery<Q>> Results forQuery(@Nonnull final Q query) {
+        return new Results(new ProjectableQueryDelegate<>(query));
+    }
+
+    public static <Q extends SimpleQuery<Q> & SimpleProjectable<?>> Results forQuery(@Nonnull final Q query) {
+        return new Results(new SearchQueryDelegate<>(query));
     }
 
     /**
@@ -63,17 +67,14 @@ public class Results<Q extends ProjectableQuery<Q>> {
         return transformer.apply(new ProjectableSupplier() {
 
             @Override
-            public Projectable get() {
-                final Q result;
-                if (null == selection) {
-                    result = query;
-                } else {
+            public ProjectableDelegate get() {
+                if (null != selection) {
                     if (selection.isSelectingSubset()) {
                         query.offset(selection.getStartIndex()).limit(selection.getDisplayLength());
                     }
-                    result = query.orderBy(selection.getOrderings().toArray(new OrderSpecifier<?>[0]));
+                    query.orderBy(selection.getOrderings().toArray(new OrderSpecifier<?>[0]));
                 }
-                return result;
+                return query.toProjectable();
             }
         });
     }
@@ -84,7 +85,7 @@ public class Results<Q extends ProjectableQuery<Q>> {
      * @param predicate predicate which should be matched by desired results
      * @return the results
      */
-    public Results<Q> matching(final Predicate predicate) {
+    public Results matching(final Predicate predicate) {
         if (null != predicate) {
             query = query.where(predicate);
         }
@@ -97,7 +98,7 @@ public class Results<Q extends ProjectableQuery<Q>> {
      * @param selection determines which of the results will be fetched, and how they will be ordered
      * @return query determining the narrowed results
      */
-    public Results<Q> within(final Selection<OrderSpecifier<?>> selection) {
+    public Results within(final Selection<OrderSpecifier<?>> selection) {
         this.selection = selection;
         return this;
     }

@@ -1,7 +1,5 @@
 package pl.ais.commons.query.dsl;
 
-import com.mysema.query.Projectable;
-
 /**
  * Defines the API contract for projectable supplier.
  *
@@ -11,8 +9,8 @@ import com.mysema.query.Projectable;
 public interface ProjectableSupplier {
 
     /**
-     * @return query
+     * @return the projectable instance
      */
-    Projectable get();
+    ProjectableDelegate get();
 
 }
