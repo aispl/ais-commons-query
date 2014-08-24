@@ -104,13 +104,21 @@
         </dependency>
         <dependency>
             <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-hibernate-search</artifactId>
+            <version>${querydsl.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
             <version>${querydsl.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.mysema.querydsl</groupId>
             <artifactId>querydsl-collections</artifactId>
             <version>${querydsl.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
