@@ -18,7 +18,7 @@ import static pl.ais.commons.query.dsl.transformer.Transformers.list;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
-final List<Course> courses = Results.forQuery(query).transform(asList(course));
+final List<Course> courses = Results.forQuery(query).as(list(course));
 ```
 The above code leads to following JPQL query:
 ```sql
@@ -34,7 +34,7 @@ import static pl.ais.commons.query.dsl.transformer.Transformers.numberOfResults;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
-final Long coursesNo = Results.forQuery(query).transform(asNumberOfResults());
+final Long coursesNo = Results.forQuery(query).as(numberOfResults());
 ```
 The above code leads to following JPQL query:
 ```sql
@@ -51,7 +51,7 @@ import static pl.ais.commons.query.dsl.transformer.Transformers.singleResult;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
-final String courseName = Results.forQuery(query).matching(course.id.eq(1)).transform(asSingleResult(course.name));
+final String courseName = Results.forQuery(query).matching(course.id.eq(1)).as(singleResult(course.name));
 ```
 The above code leads to following JPQL query:
 ```sql
@@ -70,7 +70,7 @@ import static pl.ais.example.webapp.domain.model.QCourse.course;
 import static pl.ais.example.webapp.domain.model.QParticipant.participant;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course).leftJoin(course.participants, participant).orderBy(participant.name.asc());
-final SearchResults<String> searchResults = Results.forQuery(query).matching(course.participants.size().gt(5)).transform(asSearchResults(participant.name));
+final SearchResults<String> searchResults = Results.forQuery(query).matching(course.participants.size().gt(5)).as(searchResults(participant.name));
 ```
 The above code leads to following JPQL queries:
 ```sql
@@ -95,7 +95,7 @@ private transient QuerydslSelectionFactory selectionFactory;
 ....
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
 final QuerydslSelection selection = selectionFactory.createSelection(0, 10, course.name.asc(), course.id.asc());
-final List<String> searchResults = Results.forQuery(query).within(selection).transform(asList(course.name));
+final List<String> searchResults = Results.forQuery(query).within(selection).as(list(course.name));
 ```
 The above code leads to following JPQL query:
 ```sql
