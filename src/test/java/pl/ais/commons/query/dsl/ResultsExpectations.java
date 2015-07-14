@@ -1,8 +1,9 @@
 package pl.ais.commons.query.dsl;
 
-import com.mysema.query.alias.Alias;
-import com.mysema.query.collections.CollQuery;
-import com.mysema.query.types.Predicate;
+import com.querydsl.collections.CollQuery;
+import com.querydsl.core.FetchableQuery;
+import com.querydsl.core.alias.Alias;
+import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import pl.ais.commons.query.Selections;
 import pl.ais.commons.query.dsl.internal.Person;
@@ -10,12 +11,12 @@ import pl.ais.commons.query.dsl.internal.Person;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.mysema.query.alias.Alias.$;
-import static com.mysema.query.alias.Alias.getAny;
+import static com.querydsl.core.alias.Alias.$;
+import static com.querydsl.core.alias.Alias.getAny;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static pl.ais.commons.query.dsl.transformer.Transformers.list;
-import static pl.ais.commons.query.dsl.transformer.Transformers.numberOfResults;
+import static pl.ais.commons.query.dsl.Transformers.list;
+import static pl.ais.commons.query.dsl.Transformers.numberOfResults;
 
 /**
  * Verifies {@link Results} expectations.
@@ -46,7 +47,7 @@ public class ResultsExpectations {
 
         // ... when we query for persons matching specified criteria, ...
         final Person person = Alias.alias(Person.class);
-        final CollQuery query = new CollQuery().from($(person), persons);
+        final FetchableQuery query = new CollQuery().from($(person), persons);
         final Predicate predicate = $(person.getAge()).goe(60);
         final QuerydslSelection selection = createSelection(0, 1);
 
@@ -70,7 +71,7 @@ public class ResultsExpectations {
 
         // ... when we query for names of persons matching specified criteria, ...
         final Person person = Alias.alias(Person.class);
-        final CollQuery query = new CollQuery().from($(person), persons);
+        final FetchableQuery query = new CollQuery().from($(person), persons);
         final Predicate predicate = $(person.getAge()).goe(60);
         final QuerydslSelection selection = createSelection(0, 1);
 
@@ -94,7 +95,7 @@ public class ResultsExpectations {
 
         // ... when we query for persons matching specified criteria, ...
         final Person person = Alias.alias(Person.class);
-        final CollQuery query = new CollQuery().from($(person), persons);
+        final FetchableQuery query = new CollQuery().from($(person), persons);
         final Predicate predicate = $(person.getAge()).goe(60);
 
         final Long numberOfResults = Results.forQuery(query)
@@ -116,7 +117,7 @@ public class ResultsExpectations {
 
         // ... when we query for all persons from the list, ...
         final Person person = Alias.alias(Person.class);
-        final CollQuery query = new CollQuery().from($(person), persons);
+        final FetchableQuery query = new CollQuery().from($(person), persons);
 
         final List<Person> results = Results.forQuery(query)
                                             .as(list(getAny(person)));

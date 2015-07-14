@@ -1,14 +1,16 @@
 package pl.ais.commons.query.dsl;
 
-import com.mysema.query.SimpleProjectable;
-import com.mysema.query.SimpleQuery;
-import com.mysema.query.support.ProjectableQuery;
-import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.FetchableQuery;
+import com.querydsl.core.ResultTransformer;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import pl.ais.commons.query.Selection;
+import pl.ais.commons.query.Selections;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import java.util.Objects;
 
 /**
  * Utility class for manipulating query results.
@@ -16,29 +18,23 @@ import javax.annotation.concurrent.NotThreadSafe;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
-@NotThreadSafe
-@SuppressWarnings("PMD.BeanMembersShouldSerialize")
-public class Results {
+@Immutable
+public final class Results {
 
-    private QueryDelegate query;
+    private final FetchableQuery<?, ?> query;
 
-    private Selection<OrderSpecifier<?>> selection;
+    private final Selection<OrderSpecifier> selection;
 
-    /**
-     * Constructs new instance for given query.
-     *
-     * @param query query determining the results
-     */
-    protected Results(@Nonnull final QueryDelegate query) {
+    private Results(@Nonnull final FetchableQuery<?, ?> query, @Nonnull final Selection<OrderSpecifier> selection) {
         super();
 
         // Verify constructor requirements, ...
-        if (null == query) {
-            throw new IllegalArgumentException("Query is required.");
-        }
+        Objects.requireNonNull(query, "Query is required.");
+        Objects.requireNonNull(selection, "Selection is required.");
 
         // ... and initialize this instance fields.
         this.query = query;
+        this.selection = selection;
     }
 
     /**
@@ -47,12 +43,8 @@ public class Results {
      * @param query query determining the results
      * @return newly created {@link Results} instance for given query
      */
-    public static <Q extends ProjectableQuery<Q>> Results forQuery(@Nonnull final Q query) {
-        return new Results(new ProjectableQueryDelegate<>(query));
-    }
-
-    public static <Q extends SimpleQuery<Q> & SimpleProjectable<?>> Results forQuery(@Nonnull final Q query) {
-        return new Results(new SearchQueryDelegate<>(query));
+    public static Results forQuery(@Nonnull final FetchableQuery<?, ?> query) {
+        return new Results(query, Selections.allRecords(QuerydslSelectionFactory.getInstance()));
     }
 
     /**
@@ -62,21 +54,13 @@ public class Results {
      * @return transformed query results
      */
     @SuppressWarnings("PMD.ShortMethodName")
-    public <T> T as(final ResultTransformer<T> transformer) {
-
-        return transformer.apply(new ProjectableSupplier() {
-
-            @Override
-            public ProjectableDelegate get() {
-                if (null != selection) {
-                    if (selection.isSelectingSubset()) {
-                        query.offset(selection.getStartIndex()).limit(selection.getDisplayLength());
-                    }
-                    query.orderBy(selection.getOrderings().toArray(new OrderSpecifier<?>[0]));
-                }
-                return query.toProjectable();
-            }
-        });
+    public <R> R as(final ResultTransformer<R> transformer) {
+        FetchableQuery<?, ?> effective = query;
+        if (selection.isSelectingSubset()) {
+            effective = effective.offset(selection.getStartIndex()).limit(selection.getDisplayLength());
+        }
+        effective = effective.orderBy(selection.getOrderings());
+        return transformer.transform(effective);
     }
 
     /**
@@ -85,11 +69,8 @@ public class Results {
      * @param predicate predicate which should be matched by desired results
      * @return the results
      */
-    public Results matching(final Predicate predicate) {
-        if (null != predicate) {
-            query = query.where(predicate);
-        }
-        return this;
+    public Results matching(@Nullable final Predicate predicate) {
+        return (null == predicate) ? this : new Results(query.where(predicate), selection);
     }
 
     /**
@@ -98,9 +79,8 @@ public class Results {
      * @param selection determines which of the results will be fetched, and how they will be ordered
      * @return query determining the narrowed results
      */
-    public Results within(final Selection<OrderSpecifier<?>> selection) {
-        this.selection = selection;
-        return this;
+    public Results within(@Nullable final Selection<OrderSpecifier> selection) {
+        return (null == selection) ? this : new Results(query, selection);
     }
 
 }

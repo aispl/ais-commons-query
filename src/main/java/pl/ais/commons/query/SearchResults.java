@@ -1,16 +1,16 @@
 package pl.ais.commons.query;
 
-import static com.google.common.base.Objects.toStringHelper;
-
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
+import com.google.common.collect.ImmutableList;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
-import com.google.common.collect.ImmutableList;
+import static com.google.common.base.Objects.toStringHelper;
 
 /**
  * Container for search results of specified type.
@@ -21,24 +21,10 @@ import com.google.common.collect.ImmutableList;
  */
 @Immutable
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
-public final class SearchResults<E extends Serializable> implements Serializable {
+public final class SearchResults<E> implements Serializable {
 
     @SuppressWarnings("rawtypes")
     private static final SearchResults EMPTY = new SearchResults();
-
-    /**
-     * Identifies the original class version for which it is capable of writing streams and from which it can read.
-     *
-     * @see <a href="http://docs.oracle.com/javase/7/docs/platform/serialization/spec/version.html#6678">Type Changes Affecting Serialization</a>
-     */
-    private static final long serialVersionUID = 7272352995253612865L;
-
-    /**
-     * @return shared instance of empty search results
-     */
-    public static <E extends Serializable> SearchResults<E> emptySearchResults() {
-        return EMPTY;
-    }
 
     private final ImmutableList<E> elements;
 
@@ -48,29 +34,39 @@ public final class SearchResults<E extends Serializable> implements Serializable
      * Constructs the instance with empty list of elements.
      */
     private SearchResults() {
-        this(Collections.<E> emptyList(), 0L);
+        this(0L, Collections.<E> emptyList());
     }
 
     /**
      * Constructs new instance.
      *
-     * @param elements elements to be included in this search results
      * @param totalRecords total number of records
+     * @param elements elements to be included in this search results
      * @throws NullPointerException if any of {@code elements} is {@code null}
      */
-    public SearchResults(@Nonnull final List<E> elements, @Nonnegative final long totalRecords) {
+    private SearchResults(@Nonnegative final long totalRecords, @Nonnull final List<E> elements) {
 
         // Verify constructor requirements, ...
-        if (null == elements) {
-            throw new IllegalArgumentException("Elements are required.");
-        }
         if (totalRecords < 0) {
             throw new IllegalArgumentException("Total number of records should be non-negative.");
         }
 
+        Objects.requireNonNull(elements, "Elements are required.");
+
         // ... and initialize this instance fields.
         this.elements = ImmutableList.copyOf(elements);
         this.totalRecords = totalRecords;
+    }
+
+    /**
+     * @return shared instance of empty search results
+     */
+    public static <E> SearchResults<E> emptySearchResults() {
+        return EMPTY;
+    }
+
+    public static <E> SearchResults<E> of (final long totalRecords, @Nonnull final List<E> elements) {
+          return (totalRecords <= 0) ? EMPTY : new SearchResults<E>(totalRecords, elements);
     }
 
     /**

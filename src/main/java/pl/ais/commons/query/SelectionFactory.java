@@ -1,6 +1,6 @@
 package pl.ais.commons.query;
 
-import java.io.Serializable;
+import javax.annotation.Nonnegative;
 
 /**
  * Defines the API contract for factory creating the {@link Selection selections}.
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
-public interface SelectionFactory<R extends Serializable, S extends Selection<R>> {
+public interface SelectionFactory<R, S extends Selection<R>> {
 
     /**
      * Creates and returns new {@link Selection} instance.
@@ -21,11 +21,11 @@ public interface SelectionFactory<R extends Serializable, S extends Selection<R>
      * @return newly created {@link Selection} instance
      */
     @SuppressWarnings("unchecked")
-    S createSelection(int startIndex, int displayLength, R... orderings);
+    S createSelection(@Nonnegative int startIndex, int displayLength, R... orderings);
 
     /**
      * @return ordering type supported by this factory
      */
-    Class<?> getOrderingType();
+    Class<? extends R> getOrderingType();
 
 }

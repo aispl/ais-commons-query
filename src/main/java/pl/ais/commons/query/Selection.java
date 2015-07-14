@@ -1,10 +1,10 @@
 package pl.ais.commons.query;
 
-import java.io.Serializable;
-import java.util.List;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Defines the subset of database records by specifying the records ordering, index of the first one,
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
-public interface Selection<R extends Serializable> extends Serializable {
+public interface Selection<R> {
 
     /**
      * @return the display length ({@code -1} when all records should be selected)
@@ -26,7 +26,7 @@ public interface Selection<R extends Serializable> extends Serializable {
      * @return current orderings used by this selection
      */
     @Nonnull
-    List<? extends R> getOrderings();
+    R[] getOrderings();
 
     /**
      * @return the index of first record
@@ -36,17 +36,31 @@ public interface Selection<R extends Serializable> extends Serializable {
 
     /**
      * @return {@code true} if subset of all records (defined by this selection) should be selected,
-     *         {@code false} otherwise (all records should be selected)
+     * {@code false} otherwise (all records should be selected)
      */
     boolean isSelectingSubset();
 
     /**
      * Creates and returns new {@link Selection} instance by merging current and provided data ordering.
      *
-     * @param orderings the orderings to add
+     * @param first first ordering to be merged
+     * @param rest  remaining orderings to be merged
      * @return newly created {@link Selection} instance
      */
     @Nonnull
-    Selection<R> withOrderings(@Nonnull final List<? extends R> orderings);
+    default Selection<R> withOrderings(@Nonnull R first, @Nonnull R... rest) {
+        final ArrayDeque<R> queue = new ArrayDeque<>(rest.length + 1);
+        queue.addFirst(first);
+        queue.addAll(Arrays.asList(rest));
+        return withOrderings(queue);
+    }
+
+    /**
+     * Creates and returns new {@link Selection} instance by merging current and provided data ordering.
+     *
+     * @param orderings collection of orderings to be merged
+     * @return newly created {@link Selection} instance
+     */
+    Selection<R> withOrderings(@Nonnull Collection<R> orderings);
 
 }

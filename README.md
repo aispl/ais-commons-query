@@ -14,7 +14,7 @@ We will use simple domain model for the examples below
 Having _JPAQuery_ you may create new _Results_ instance with _forQuery_ method, and request query results transforming
 into number of records, single result, _List_, or _SearchResults_ using one of the [Transformers](src/main/java/pl/ais/commons/query/dsl/transformer/Transformers.java).
 ```java
-import static pl.ais.commons.query.dsl.transformer.Transformers.list;
+import static pl.ais.commons.query.dsl.Transformers.list;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
@@ -30,7 +30,7 @@ select course from Course course
 Simple example, counting all records returned by the query.
 
 ```java
-import static pl.ais.commons.query.dsl.transformer.Transformers.numberOfResults;
+import static pl.ais.commons.query.dsl.Transformers.numberOfResults;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
@@ -47,7 +47,7 @@ A little more complicated use case, where you specify criteria to be matched by 
 and fetch only single _Course_ property (_name_) instead of the whole _Course_ entity.
 
 ```java
-import static pl.ais.commons.query.dsl.transformer.Transformers.singleResult;
+import static pl.ais.commons.query.dsl.Transformers.singleResult;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 final JPAQuery query = new JPAQuery(entityManager, jpqlTemplates).from(course);
@@ -65,7 +65,7 @@ matching given criteria. It is very useful, when you want to paginate results us
 in this case you fetch only subset of all records matching criteria, and are aware about the total number of matching records too.
 
 ```java
-import static pl.ais.commons.query.dsl.transformer.Transformers.searchResults;
+import static pl.ais.commons.query.dsl.Transformers.searchResults;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 import static pl.ais.example.webapp.domain.model.QParticipant.participant;
 ...
@@ -87,7 +87,7 @@ _Selection_ instances should be created with specific _SelectionFactory_. If you
 ```
 and then inject as dependency into your code:
 ```java
-import static pl.ais.commons.query.dsl.transformer.Transformers.list;
+import static pl.ais.commons.query.dsl.Transformers.list;
 import static pl.ais.example.webapp.domain.model.QCourse.course;
 ...
 @Autowired

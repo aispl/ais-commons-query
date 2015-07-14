@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
+@Deprecated
 public interface SearchResultsProvider<E extends Serializable> {
 
     /**

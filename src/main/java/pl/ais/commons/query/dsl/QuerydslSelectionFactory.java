@@ -1,10 +1,9 @@
 package pl.ais.commons.query.dsl;
 
-import com.mysema.query.types.OrderSpecifier;
+import com.querydsl.core.types.OrderSpecifier;
 import pl.ais.commons.query.SelectionFactory;
 
 import javax.annotation.concurrent.Immutable;
-import java.util.Arrays;
 
 /**
  * {@link SelectionFactory} implementation creating selections suitable for usage with Querydsl.
@@ -13,7 +12,7 @@ import java.util.Arrays;
  * @since 1.0.1
  */
 @Immutable
-public final class QuerydslSelectionFactory implements SelectionFactory<OrderSpecifier<?>, QuerydslSelection> {
+public final class QuerydslSelectionFactory implements SelectionFactory<OrderSpecifier, QuerydslSelection> {
 
     private static final QuerydslSelectionFactory INSTANCE = new QuerydslSelectionFactory();
 
@@ -36,15 +35,15 @@ public final class QuerydslSelectionFactory implements SelectionFactory<OrderSpe
      */
     @Override
     public QuerydslSelection createSelection(
-        final int startIndex, final int displayLength, final OrderSpecifier<?>... orderings) {
-        return new QuerydslSelection(startIndex, displayLength, Arrays.asList(orderings));
+        final int startIndex, final int displayLength, final OrderSpecifier... orderings) {
+        return new QuerydslSelection(startIndex, displayLength, orderings);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Class<?> getOrderingType() {
+    public Class<? extends OrderSpecifier> getOrderingType() {
         return OrderSpecifier.class;
     }
 
