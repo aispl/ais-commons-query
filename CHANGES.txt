@@ -2,3 +2,8 @@
 
     - Dependencies update: QueryDSL 3.3.3 will be used from now on, deprecated junit-dep replaced with junit
     - Generic Type of Results changed to avoid problems with generic types intersection
+
+1.1.3 -> 1.2.1
+
+    - requires Java 8 now
+    - misc API changes and clean up, mostly to simplify usage; using Java 8 features to make the code more readable
