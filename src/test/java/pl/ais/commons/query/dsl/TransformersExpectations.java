@@ -41,7 +41,7 @@ public class TransformersExpectations {
     /**
      * Verifies {@link Transformers#firstResult} expectations.
      */
-    static class AsFirstResultTransformerExpectations {
+    public static class AsFirstResultTransformerExpectations {
 
         /**
          * Verifies if first element is returned for not empty result set.
@@ -93,7 +93,7 @@ public class TransformersExpectations {
      * @author Warlock, AIS.PL
      * @since 1.0
      */
-    static class AsStreamResultTransformerExpectations {
+    public static class AsStreamResultTransformerExpectations {
 
         /**
          * Verifies if stream of all elements is provided by default.

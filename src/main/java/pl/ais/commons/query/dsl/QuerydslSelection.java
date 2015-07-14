@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
  * @since 1.0.1
  */
 @Immutable
-final class QuerydslSelection extends AbstractSelection<OrderSpecifier> {
+public final class QuerydslSelection extends AbstractSelection<OrderSpecifier> {
 
     /**
      * @param startIndex    the index of first record
