@@ -15,9 +15,9 @@ import static com.google.common.base.Objects.toStringHelper;
 /**
  * Container for search results of specified type.
  *
+ * @param <E> the type of each search result
  * @author Warlock, AIS.PL
  * @since 1.0.1
- * @param <E> the type of each search result
  */
 @Immutable
 @SuppressWarnings("PMD.BeanMembersShouldSerialize")
@@ -25,6 +25,8 @@ public final class SearchResults<E> implements Serializable {
 
     @SuppressWarnings("rawtypes")
     private static final SearchResults EMPTY = new SearchResults();
+
+    private static final long serialVersionUID = 8326639095655688933L;
 
     private final ImmutableList<E> elements;
 
@@ -34,14 +36,14 @@ public final class SearchResults<E> implements Serializable {
      * Constructs the instance with empty list of elements.
      */
     private SearchResults() {
-        this(0L, Collections.<E> emptyList());
+        this(0L, Collections.<E>emptyList());
     }
 
     /**
      * Constructs new instance.
      *
      * @param totalRecords total number of records
-     * @param elements elements to be included in this search results
+     * @param elements     elements to be included in this search results
      * @throws NullPointerException if any of {@code elements} is {@code null}
      */
     private SearchResults(@Nonnegative final long totalRecords, @Nonnull final List<E> elements) {
@@ -65,8 +67,8 @@ public final class SearchResults<E> implements Serializable {
         return EMPTY;
     }
 
-    public static <E> SearchResults<E> of (final long totalRecords, @Nonnull final List<E> elements) {
-          return (totalRecords <= 0) ? EMPTY : new SearchResults<E>(totalRecords, elements);
+    public static <E> SearchResults<E> of(final long totalRecords, @Nonnull final List<E> elements) {
+        return (totalRecords <= 0) ? EMPTY : new SearchResults<E>(totalRecords, elements);
     }
 
     /**

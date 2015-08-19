@@ -71,7 +71,7 @@ public abstract class AbstractSelection<R> implements Selection<R>, Serializable
      */
     @Override
     public R[] getOrderings() {
-        return orderings;
+        return Arrays.copyOf(orderings, orderings.length);
     }
 
     /**
