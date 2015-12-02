@@ -1,7 +1,5 @@
 package pl.ais.commons.query;
 
-import com.google.common.collect.ImmutableList;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -26,9 +24,9 @@ public final class SearchResults<E> implements Serializable {
     @SuppressWarnings("rawtypes")
     private static final SearchResults EMPTY = new SearchResults();
 
-    private static final long serialVersionUID = 8326639095655688933L;
+    private static final long serialVersionUID = 6728443755768140782L;
 
-    private final ImmutableList<E> elements;
+    private final List<E> elements;
 
     private final long totalRecords;
 
@@ -56,7 +54,7 @@ public final class SearchResults<E> implements Serializable {
         Objects.requireNonNull(elements, "Elements are required.");
 
         // ... and initialize this instance fields.
-        this.elements = ImmutableList.copyOf(elements);
+        this.elements = Collections.unmodifiableList(elements);
         this.totalRecords = totalRecords;
     }
 
@@ -68,7 +66,7 @@ public final class SearchResults<E> implements Serializable {
     }
 
     public static <E> SearchResults<E> of(final long totalRecords, @Nonnull final List<E> elements) {
-        return (totalRecords <= 0) ? EMPTY : new SearchResults<E>(totalRecords, elements);
+        return (totalRecords <= 0) ? EMPTY : new SearchResults<>(totalRecords, elements);
     }
 
     /**
