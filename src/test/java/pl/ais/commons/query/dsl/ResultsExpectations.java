@@ -24,7 +24,7 @@ import static pl.ais.commons.query.dsl.Transformers.numberOfResults;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
-@SuppressWarnings({"boxing", "static-method", "PMD.TooManyStaticImports"})
+@SuppressWarnings({"boxing", "PMD.TooManyStaticImports"})
 public class ResultsExpectations {
 
     private static List<Person> createPersonList() {
@@ -81,7 +81,7 @@ public class ResultsExpectations {
                                             .as(list($(person.getName())));
 
         // ... then we should get exactly one result, 'Uncle Bob'.
-        assertTrue("", (1 == results.size()) && results.get(0).equals("Uncle Bob"));
+        assertTrue("", (1 == results.size()) && "Uncle Bob".equals(results.get(0)));
     }
 
     /**

@@ -14,7 +14,6 @@ import java.util.Objects;
  * @author Warlock, AIS.PL
  * @since 1.0.1
  */
-@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 @ThreadSafe
 public abstract class AbstractSelection<R> implements Selection<R>, Serializable {
 
@@ -45,7 +44,7 @@ public abstract class AbstractSelection<R> implements Selection<R>, Serializable
     }
 
     /**
-     * @see java.lang.Object#equals(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(final Object object) {
@@ -69,6 +68,7 @@ public abstract class AbstractSelection<R> implements Selection<R>, Serializable
     /**
      * {@inheritDoc}
      */
+    @Nonnull
     @Override
     public R[] getOrderings() {
         return Arrays.copyOf(orderings, orderings.length);
@@ -83,7 +83,7 @@ public abstract class AbstractSelection<R> implements Selection<R>, Serializable
     }
 
     /**
-     * @see java.lang.Object#hashCode()
+     * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("boxing")

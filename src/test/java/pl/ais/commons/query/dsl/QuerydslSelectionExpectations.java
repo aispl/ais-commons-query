@@ -1,14 +1,13 @@
 package pl.ais.commons.query.dsl;
 
-import static org.junit.Assert.assertTrue;
-import static org.springframework.util.SerializationUtils.deserialize;
-import static org.springframework.util.SerializationUtils.serialize;
+import org.junit.Test;
+import pl.ais.commons.query.Selections;
 
 import java.io.Serializable;
 
-import org.junit.Test;
-
-import pl.ais.commons.query.Selections;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.util.SerializationUtils.deserialize;
+import static org.springframework.util.SerializationUtils.serialize;
 
 /**
  * Verifies {@link QuerydslSelection} expectations.
@@ -16,7 +15,6 @@ import pl.ais.commons.query.Selections;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
-@SuppressWarnings("static-method")
 public class QuerydslSelectionExpectations {
 
     /**

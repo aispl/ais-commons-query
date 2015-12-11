@@ -48,7 +48,7 @@ public interface Selection<R> {
      * @return newly created {@link Selection} instance
      */
     @Nonnull
-    default Selection<R> withOrderings(@Nonnull R first, @Nonnull R... rest) {
+    default Selection<R> withOrderings(@Nonnull final R first, @Nonnull final R... rest) {
         final ArrayDeque<R> queue = new ArrayDeque<>(rest.length + 1);
         queue.addFirst(first);
         queue.addAll(Arrays.asList(rest));

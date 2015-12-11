@@ -50,7 +50,8 @@ public final class Selections {
         return factory.createSelection(0, -1, copyOrderings(factory, orderings));
     }
 
-    private static <R, S extends Selection<R>> R[] copyOrderings(final @Nonnull SelectionFactory<R, S> factory,
+    @SuppressWarnings("unchecked")
+    private static <R, S extends Selection<R>> R[] copyOrderings(@Nonnull final SelectionFactory<R, S> factory,
                                                                  final R... orderings) {
         final Class<R[]> arrayType = (Class<R[]>) Array.newInstance(factory.getOrderingType(), 0).getClass();
         return Arrays.copyOf(orderings, orderings.length, arrayType);

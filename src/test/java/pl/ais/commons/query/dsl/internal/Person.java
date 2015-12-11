@@ -6,7 +6,6 @@ package pl.ais.commons.query.dsl.internal;
  * @author Warlock, AIS.PL
  * @since 1.1.1
  */
-@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public class Person {
 
     private int age;
@@ -21,7 +20,7 @@ public class Person {
      * Constructs new instance.
      *
      * @param name the name
-     * @param age the age
+     * @param age  the age
      */
     public Person(final String name, final int age) {
         this();

@@ -22,6 +22,7 @@ public final class UnsortableSelection<R extends Serializable> extends AbstractS
      * @param startIndex the index of first record
      * @param displayLength the number of records (if {@code -1}, all records will be used)
      */
+    @SuppressWarnings("unchecked")
     UnsortableSelection(@Nonnegative final int startIndex, final int displayLength) {
         super(startIndex, displayLength);
     }

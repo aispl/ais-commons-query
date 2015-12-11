@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.base.Objects.toStringHelper;
-
 /**
  * Container for search results of specified type.
  *
@@ -18,7 +16,6 @@ import static com.google.common.base.Objects.toStringHelper;
  * @since 1.0.1
  */
 @Immutable
-@SuppressWarnings("PMD.BeanMembersShouldSerialize")
 public final class SearchResults<E> implements Serializable {
 
     @SuppressWarnings("rawtypes")
@@ -61,10 +58,12 @@ public final class SearchResults<E> implements Serializable {
     /**
      * @return shared instance of empty search results
      */
+    @SuppressWarnings("unchecked")
     public static <E> SearchResults<E> emptySearchResults() {
         return EMPTY;
     }
 
+    @SuppressWarnings("unchecked")
     public static <E> SearchResults<E> of(final long totalRecords, @Nonnull final List<E> elements) {
         return (totalRecords <= 0) ? EMPTY : new SearchResults<>(totalRecords, elements);
     }
@@ -86,11 +85,11 @@ public final class SearchResults<E> implements Serializable {
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return toStringHelper(this).add("totalRecords", totalRecords).add("elements", elements).toString();
+        return String.format("Total records: %d, fetched: %s", totalRecords, elements);
     }
 
 }
