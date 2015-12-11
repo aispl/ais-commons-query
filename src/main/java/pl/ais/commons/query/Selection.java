@@ -18,7 +18,7 @@ public interface Selection<R> {
 
     /**
      * @return the display length ({@code -1} when all records should be selected)
-     * @see {@link #isSelectingSubset()}
+     * @see #isSelectingSubset()
      */
     int getDisplayLength();
 
